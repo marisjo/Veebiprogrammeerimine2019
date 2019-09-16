@@ -1,6 +1,27 @@
 <?php
   $userName = "Maris Jool";
-?>
+  $fullTimeNow = date("d.m.Y H:i:s");
+  $hourNow = date("H;i");
+  $partOfDay = "hägune aeg";
+  
+  
+  if($hourNow < 8){
+	$partOfDay = "hommik";
+  }
+  
+  if($hourNow >= 12 and  < 17){ 
+    $partOfDay = "lõuna";
+	}
+	
+  if ($hourNow > 16){ 
+    $partOfDay = "õhtu";
+	}
+	
+  if ($hourNow > 24:1){
+	$partOfDay = "öö";
+	}
+	
+	
 
 <!DOCTYPE html> 
 <html lang="et">
@@ -18,8 +39,9 @@ p    {color: black;}
 </style>
 </head>
 <body>
+  <hr>
   <?php
-    echo "<h1>" .$userName . "veebiprogrammeerimine</h1>";
+    echo "<p>Lehe avamise hetkel oli aeg: " .$fullTimeNow .", " .$partOfDay .".</p>";
   ?>
   <p>See veebileht on loodud õppetöö käigus ning ei sisalda mingit tõsiseltvõetavat sisu!</p>
   <p>Teretulemast <em>minu</em> uuele veebilehele!</p>
