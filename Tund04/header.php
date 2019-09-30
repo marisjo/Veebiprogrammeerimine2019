@@ -1,16 +1,13 @@
   
-<!DOCTYPE html>
-<html lang="et">
-<head>
-  <meta charset="utf-8">
-  <title>
-  <?php
-    echo $userName;
-	echo $weekDaysET =  ["esmaspäev", "teisipäev", "kolmapäev"];
+<?php
+  $pageHeaderHTML = "<!DOCTYPE html> \n";
+  $pageHeaderHTML .= '<html lang="et">'. "\n";
+  $pageHeaderHTML .= "<head> \n";
+  $pageHeaderHTML .= "</head> \n";
+  $pageHeaderHTML .= "<body>";
+  echo $pageHeaderHTML;
   ?>
-   programmeerib veebi</title>
 
  © <?php echo date("Y"); 
    ?> Copyright.
-</head>
-<body>
+

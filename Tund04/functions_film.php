@@ -12,17 +12,17 @@
   $stmt -> bind_result ($filmTitle, $filmYear);
   $stmt -> execute();
   //sain pinu (stack) täie infot, hakkan ühekaupa võtma, kuni saab
-  while($stmt -> fetch()) {
-	  //echo "Pealkiri: " .$filmTitle;
-	  $filmInfoHTML .= "<h3>" .$filmTitle ."</h3>";
-	  $filmInfoHTML .= "<p>" .$filmYear ."</p>";
-	  
-  }
+  while($stmt -> fetch()){
+		//echo " Pealkiri: " .$filmTitle;
+		$filmInfoHTML .= "<h3>" .$filmTitle ."</h3>";
+		$filmInfoHTML .= "<p>" .$filmYear ."</p>";
+	  }
+	
   
-  //sulgen ühenduse 
-  $stmt -> close();
-  $conn ->close();
-  return $filmInfoHTML;
+      //sulgen ühenduse 
+      $stmt -> close();
+      $conn ->close();
+      return $filmInfoHTML;
 }
 
 function storeFilmInfo($filmTitle, $filmYear, $filmDuration, $filmGenre, $filmStudio, $filmDirector){
@@ -38,6 +38,21 @@ function storeFilmInfo($filmTitle, $filmYear, $filmDuration, $filmGenre, $filmSt
        $conn ->close();
 }
 
+  function readOldFilms($filmAge){
+	  $conn = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]);
+	  $maxYear = date("Y") - $filmAge;
+	  $stmt = $conn->prepare("SELECT pealkiri, aasta FROM film WHERE aasta < ?");
+	  $stmt->bind_param("i", $maxYear);
+	  $stmt->bind_result($filmTitle, $filmYear);
+	  $stmt->execute();
+	  $filmInfoHTML = "";
+	  while($stmt->fetch()){
+		$filmInfoHTML .= "<h3>" .$filmTitle ."</h3>";
+		$filmInfoHTML .= "<p>Tootmisaasta: " .$filmYear .".</p>";
+	  }
 
 
-?>
+      $stmt->close();
+	  $conn->close();
+      return $filmInfoHTML;
+ }

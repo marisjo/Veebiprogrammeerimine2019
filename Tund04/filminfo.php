@@ -7,7 +7,10 @@
   
   
 
-$filmInfoHTML = readAllFilms();
+  $filmInfoHTML = readAllFilms();
+  $filmAge = 50;
+  $oldFilmInfoHTML = readOldFilms($filmAge);
+  
 
   
   
@@ -25,6 +28,9 @@ $filmInfoHTML = readAllFilms();
   <p>Preaegu meie andmebaasis on järgmised filmid:</p>
   <?php
     echo $filmInfoHTML;
+	echo "<hr>";
+	echo "<h2>Filmid, mis on vanemad kui " .$filmAge ." aastat.</h2>";
+	echo $oldFilmInfoHTML;
   ?>
   
 </body>
