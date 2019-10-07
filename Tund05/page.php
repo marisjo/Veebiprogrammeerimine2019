@@ -1,5 +1,16 @@
 <?php
+  require("../../../config_vp2019.php");
+  require ("functions_main.php"); 
+  require("functions_user.php");
+  $database = "if19_maris_jo_1";
+  
   $userName = "Maris Jool";
+  
+  
+  $notice = null;
+  $email = null;
+  $emailError = null;
+  $passwordError = null;
   
   $photoDir = "../Photos/";
   $photoTypes = ["image/jpeg", "img/png"];
@@ -8,6 +19,7 @@
   $hourNow = date("H");
   $partOfDay = "hägune aeg";
   $weekDaysET =  ["esmaspäev", "teisipäev", "kolmapäev", "neljapäev", "reede", "laupäev", "pühapäev"];
+  $monthNamesET = ["jaanuar", "veebruar", "märts", "aprill", "mai", "juuni", "juuli", "august", "september", "oktoober", "november", "detsember"];
   
  
   if($hourNow < 8){
@@ -65,6 +77,24 @@
 	//<img src="../photos/tlu_terra_600x400_1.jpg" alt="TLÜ Terra õppehoone">
 	$randomImgHTML = '<img src="' .$photoDir .$photoList[$photoNum] .'" alt="Juhuslik foto">';
 	
+	  if(isset($_POST["login"])){
+		if (isset($_POST["email"]) and !empty($_POST["email"])){
+		  $email = test_input($_POST["email"]);
+		} else {
+		  echo $emailError = "Palun sisesta kasutajatunnusena enda e-mail!";
+		}
+	  
+		if (!isset($_POST["password"]) or strlen($_POST["password"]) < 8){
+		  $passwordError = "Palun sisesta parool, milles on vähemalt 8 märki.";
+		}
+	  
+		if(empty($emailError) and empty($passwordError)){
+		  $notice = signIn($email, $_POST["password"]);
+		} else {
+			echo $notice = "Sisselogimine ebaõnnestus.";
+		}
+	  }
+	
 	require("header.php");
 
    echo "<h1>" .$userName .", veebiprogrammeerimine</h1>";
@@ -73,6 +103,16 @@
   <?php
     echo $semesterInfoHTML;
   ?>  
+  <hr>
+  <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+	  <label>E-mail (kasutaja):</label><br>
+	  <input type="email" name="email" value="<?php echo $email; ?>">&nbsp;<span><?php echo $emailError; ?></span><br>
+	  
+	  <label>Parool:</label><br>
+	  <input name="password" type="password">&nbsp;<span><?php echo $passwordError; ?></span><br>
+	  
+	  <input name="login" type="submit" value="Logi sisse">&nbsp;<span><?php echo $notice; ?>
+	</form>
   <hr>
   <?php
     echo "<p>Lehe avamise hetkel oli aeg: " .$fullTimeNow .", " .$partOfDay .".</p>";

@@ -42,10 +42,18 @@
 	  }//eesnime kontroll
 	  
 	  //perekonnanimi
-	  $surname = test_input($_POST["surName"]);
+	  	if (isset($_POST["surName"]) and !empty($_POST["surName"])){
+		$surname = test_input($_POST["surName"]);
+	} else {
+		$surnameError = "Palun sisesta perekonnanimi!";
+	}
 	  
 	  //sugu
-	  $gender = test_input($_POST["gender"]);
+	  if(isset($_POST["gender"])){
+	    $gender = intval($_POST["gender"]);
+	} else {
+		$genderError = "Palun märgi sugu!";
+	}
 	  
 	  //kontrollime, kas sünniaeg sisestati ja kas on korrektne
 	  if(isset($_POST["birthDay"]) and !empty($_POST["birthDay"])){
@@ -77,14 +85,36 @@
 	  }//kas kuupäev on valiidne
 	  
 	  //email kontroll
-	  $email = test_input($_POST["email"]);
+	   if (isset($_POST["email"]) and !empty($_POST["email"])){
+		$email = test_input($_POST["email"]);
+	  } else {
+		  $emailError = "Palun sisesta e-mail!";
+	  }
 	  
 	  //parooli kontroll (kas on olemas, kas vähemalt 8 tähte ja kaks korda ühtemoodi
 	  //strlen($_POST["password"]) > 8
+	  
+	    if (!isset($_POST["password"]) or empty($_POST["password"])){
+		$passwordError = "Palun sisesta parool!";
+	  } else {
+		  if(strlen($_POST["password"]) < 8){
+			  $passwordError = "Liiga lühike parool (sisestasite ainult " .strlen($_POST["password"]) ." märki).";
+		  }
+	  	  
+		  if (!isset($_POST["confirmpassword"]) or empty($_POST["confirmpassword"])){
+		$confirmpasswordError = "Palun sisesta parool kaks korda!";  
+	  } else {
+		  if($_POST["confirmpassword"] != $_POST["password"]){
+			  $confirmpasswordError = "Sisestatud paroolid olid erinevad.";
+		  }
+	  }
+	  }
 	  //kui kõik korras, siis salvestama
       if(empty($nameError) and empty($surnameError) and empty($birthMonthError) and empty($birthYearError) and empty($birthDayError) and empty($birthDateError) and empty($genderError) and empty($emailError) and empty($passwordError) and empty($confirmpasswordError)){
 		  $notice = signUp($name, $surname, $email, $gender, $birthDate, $_POST["password"]);
 	  }//kui kõik korras
+	  
+	  
 	  
   }//kui on nuppu vajutatud
   
