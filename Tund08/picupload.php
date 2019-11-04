@@ -29,6 +29,7 @@
   $maxPicW = 600;
   $maxPicH = 400;
   
+  
   //var_dump($_POST);
   //var_dump($_FILES);
  
@@ -115,14 +116,16 @@
 				 }else{  
 				         $notice = "Vahendatud faili salvestamine õnnestus!";
 				 }
+			     }
 				 
 				 if($imageFileType  == "png") {
-					 if(imagepng($myNewImage, $pic_upload_dir_w600 .$filename, 90)) {
+					 if(imagepng($myNewImage, $pic_upload_dir_w600 .$filename, 6)) {
 						 $notice = "Vahendatud faili salvestamine õnnestus!";
 						
 				 }else{  
 				         $notice = "Vahendatud faili salvestamine ei õnnestunud!";
 						 
+				 }
 				 }
 				 
 				 if($imageFileType  == "gif" ) {
@@ -135,8 +138,7 @@
 				  
 				}
 				 
-                 imagedestroy ($myTempImage);
-                 imagedestroy ($myNewImage);	
+               	
 				 
 				 
 			 }// kas on liiga suur lõppeb
@@ -150,7 +152,15 @@
 				echo "Sorry, there was an error uploading your file.";
 			}
 			
-	    }
+				//salvestan info andmebaasi
+		     $notice .= addPicData($filename, test_input($_POST["altText"]), $_POST["privacy"]);
+		
+	           }
+
+			   imagedestroy ($myTempImage);
+               imagedestroy ($myNewImage);
+	
+	   
 	
 	} //kas nuppu klikiti 
 
@@ -162,20 +172,31 @@
 ?>
 
 
+
+<body>
   <?php
     echo "<h1>" .$userName ." koolitöö leht</h1>";
   ?>
   <p>See leht on loodud koolis õppetöö raames
   ja ei sisalda tõsiseltvõetavat sisu!</p>
   <hr>
+  <p><a href="?logout=1">Logi välja!</a> | Tagasi <a href="home.php">avalehele</a></p>
+  <hr>
   
-  <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>"enctype="multipart/form-data">
-	  <label>Vali üleslaetav pildifail!</label><br>
+  <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" enctype="multipart/form-data">
+	  <label>Vali üleslaetav pilt!</label>
 	  <input type="file" name="fileToUpload" id="fileToUpload">
 	  <br>
-	  <input name="submitPic" type="submit" value="Lae pilt üles"><span><?php echo $notice; ?></span>
-	  <p><a href="?logout=1">Logi välja!</a> | Tagasi <a href="home.php"> avalehele</a></p>
+	  <label>Alt tekst: </label><input type="text" name="altText">
+	  <br>
+	  <label>Privaatsus</label>
+	  <br>
+	  <input type="radio" name="privacy" value="1"><label>Avalik</label>&nbsp;
+	  <input type="radio" name="privacy" value="2"><label>Sisseloginud kasutajatele</label>&nbsp;
+	  <input type="radio" name="privacy" value="3" checked><label>Privaatne</label>
+      <br>
+	  <input name="submitPic" type="submit" value="Lae pilt üles!"><span><?php echo $notice; ?></span>
 	</form>
-	
-  
+	<hr>
+</body>
 </html>
